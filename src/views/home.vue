@@ -5,7 +5,7 @@
       <div class="carousel__search">
         <select name="" id="" class="carousel__search-bar">
           <option value="">請選擇城市</option>
-          <option value="">新北市</option>
+          <option value="" v-for="item in city" :key="item">{{item}}</option>
         </select>
         <button class="btn" id="search">
           <i class="fas fa-search"></i>
@@ -25,20 +25,43 @@
 <script>
 import axios from "axios";
 import $ from "jquery";
-import weather from '@/views/weather.vue';
+import weather from "@/views/weather.vue";
 
 export default {
   data() {
     return {
-      city:[]
+      city: [
+        "台北市",
+        "基隆市",
+        "新北市",
+        "連江縣",
+        "宜蘭縣",
+        "新竹市",
+        "新竹縣",
+        "桃園市",
+        "苗栗縣",
+        "台中市",
+        "彰化縣",
+        "南投縣",
+        "嘉義市",
+        "嘉義縣",
+        "雲林縣",
+        "台南市",
+        "高雄市",
+        "澎湖縣",
+        "金門縣",
+        "屏東縣",
+        "台東縣",
+        "花蓮縣"
+      ]
     };
   },
-  components:{
-    weather,
+  components: {
+    weather
   },
   methods: {
     getweather() {
-      const vm =this;
+      const vm = this;
       console.log(process.env.VUE_APP_WEATHER);
       function promise() {
         return new Promise(function(resolve, reject) {
@@ -53,8 +76,7 @@ export default {
         });
       }
       promise().then(function(data) {
-         vm.city = data.data.records.locations[0].location;
-         console.log(vm.city);
+        console.log(data);
       });
     }
   },
