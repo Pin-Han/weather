@@ -1,0 +1,35 @@
+.btn {
+    &,
+    &:link,
+    //沒有被按過 ->a的屬性
+    &:visited //被拜訪過 ->a的屬性
+
+    // 因為button 沒有上述兩個屬性 所以才需要＆  
+        {
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 0.85rem 2.3rem;
+        display: inline-block;
+        border-radius: 0.2rem;
+        transition: all 0s;
+        position: relative;
+        font-size: $default-font-size;
+        border: none;
+        cursor: pointer;
+        border-bottom: 2px solid $color-grey-dark;
+        background-color: transparent;
+    }
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 1rem 2rem rgba($color-black, .2);
+        background-color: $color-grey-dark;
+        color: $color-grey-light-1;
+
+        &::after {
+            transform: scaleX(1.4) scaleY(1.6);
+            opacity: 0;
+
+        }
+    }
+}
