@@ -3,11 +3,13 @@
     <div class="carousel">
       <div class="carousel__img"></div>
       <div class="carousel__search">
-        <select name="" id="" class="carousel__search-bar">
+        <select name="" id="" class="carousel__search-bar" v-model="chooseCity">
           <option value="">請選擇城市</option>
-          <option value="" v-for="item in city" :key="item">{{item}}</option>
+          <option :value="item" v-for="item in city" :key="item">{{
+            item
+          }}</option>
         </select>
-        <button class="btn" id="search">
+        <button class="btn" id="search" @click="search()">
           <i class="fas fa-search"></i>
         </button>
         <!-- <i class="fas fa-search carousel__search-icon"></i> -->
@@ -19,13 +21,38 @@
         <i class="far fa-sun"></i> -->
       </div>
     </div>
-    <weather id="weather"></weather>
+    <div class="weather" id="weather" v-if="chooseCity != ''">
+      <!-- <video autoplay muted loop class="weather__video">
+        <source :src="video_url" type="video/mp4" />
+        Sorry, your browser doesn't support embedded videos.
+      </video> -->
+      <img class="weather__img" :src="img_url" alt="tw_weather" />
+      <div class="info">
+        <div class="info__script">
+          <div class="info__sort">
+            <div class="info__sort-city">
+              {{ chooseCity }}
+            </div>
+            <div class="info__sort-degree">{{ result.average }}°</div>
+          </div>
+          <div class="info__script-description">
+            今天天氣，{{ result.descript }}
+          </div>
+        </div>
+        <div class="info__week">
+          <i class="fas fa-cloud-sun"></i>
+          <i class="fas fa-cloud-sun"></i>
+          <i class="fas fa-cloud-sun"></i>
+          <i class="fas fa-cloud-sun"></i>
+          <i class="fas fa-cloud-sun"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import axios from "axios";
 import $ from "jquery";
-import weather from "@/views/weather.vue";
 
 export default {
   data() {
@@ -53,20 +80,38 @@ export default {
         "屏東縣",
         "台東縣",
         "花蓮縣"
-      ]
+      ],
+      chooseCity: "",
+      result: {
+        average: "", //平均溫度
+        chance: "", //降雨機率
+        descript: "" //天氣描述
+      },
+      date: "",
+      phenomenon: "", //天氣現象
+      img_url: "",
+      weatherUrl: {
+        rain:
+          "https://images.unsplash.com/photo-1519692933481-e162a57d6721?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
+        cloud:
+          "https://images.unsplash.com/photo-1501630834273-4b5604d2ee31?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        cloudsDay:
+          "https://images.unsplash.com/photo-1469765869284-c3821b02cf48?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+        wind:
+          "https://images.unsplash.com/photo-1456356627738-3a96db6e2e33?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1358&q=80",
+        sun:
+          "https://images.unsplash.com/photo-1525490829609-d166ddb58678?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1349&q=80"
+      }
     };
   },
-  components: {
-    weather
-  },
   methods: {
-    getweather() {
+    getweather(data) {
+      //取得中央氣象局資料
       const vm = this;
-      console.log(process.env.VUE_APP_WEATHER);
       function promise() {
         return new Promise(function(resolve, reject) {
           axios
-            .get(process.env.VUE_APP_WEATHER)
+            .get(`${process.env.VUE_APP_WEATHER}&locationName=${data}`)
             .then(res => {
               resolve(res);
             })
@@ -76,15 +121,47 @@ export default {
         });
       }
       promise().then(function(data) {
-        console.log(data);
+        const road = data.data.records.locations[0].location[0].weatherElement;
+        //台北的天氣有問題
+        vm.result.chance = road[0].time[0].elementValue[0].value;
+        vm.result.average = road[1].time[0].elementValue[0].value;
+        vm.result.descript = road[10].time[0].elementValue[0].value;
+        vm.phenomenon = road[6].time[0].elementValue[0].value;
+        const today = new Date();
+        vm.date = `${today.getMonth()}/${today.getDate()}`;
+        vm.checkImg(vm.phenomenon);
       });
+    },
+    search() {
+      //搜尋縣市
+      this.getweather(this.chooseCity);
+    },
+    checkImg(data) {
+      //判斷天氣，顯示不同的圖片
+      const vm = this;
+      console.log(data);
+      const weatherImg = {
+        陰短暫雨: () => {
+          vm.img_url = vm.weatherUrl.rain;
+        },
+        多雲: () => {
+          vm.img_url = vm.weatherUrl.cloud;
+        },
+        多雲時晴: () => {
+          vm.img_url = vm.weatherUrl.cloud;
+        },
+        陰天: () => {
+          vm.img_url = vm.weatherUrl.cloudsDay;
+        },
+        晴時多雲: () => {
+          vm.img_url = vm.weatherUrl.cloud;
+        }
+      };
+      weatherImg[data]();
     }
   },
   mounted() {
-    this.getweather();
     $("#search").click(function() {
-      console.log(this);
-
       $("html,body").animate(
         {
           scrollTop: $("#weather").offset().top

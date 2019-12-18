@@ -4,18 +4,19 @@
     min-height: 650px;
     position: relative;
 
-    &__video {
+    &__img {
         position: absolute;
         top: 0;
         left: 0;
         z-index: -1;
-        opacity: .85;
+        opacity: .7;
         overflow: hidden;
         width: 100%;
         min-height: 650px;
         height: auto;
-        max-height: 100vh;
-        object-fit: cover;
+        height: 100vh;
+         object-fit: cover;
+        
     }
 }
 
@@ -44,6 +45,7 @@
             text-align: center;
             display: flex;
             align-items: center;
+            width: 60%;
         }
     }
 
