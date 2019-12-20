@@ -1,0 +1,23 @@
+.cls-1,
+.cls-2,
+.cls-4,
+.cls-5 {
+  fill: $color-grey-tra;
+  transition: all 0.3s;
+  &:hover{
+      fill: $color-primary-green;
+      transform: translate(-3px,-3px);
+  }
+  stroke: $color-grey-dark-5;
+}
+.cls-1,
+.cls-3,
+.cls-4 {
+  stroke: gray;
+}
+.cls-3 {
+  fill: none;
+}
+.cls-4 {
+  stroke-width: 1.08px;
+}

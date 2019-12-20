@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="carousel">
+      <twmap class="carousel__map"></twmap>
       <div class="carousel__img"></div>
       <div class="carousel__search">
         <select name="" id="" class="carousel__search-bar" v-model="chooseCity">
@@ -53,8 +54,10 @@
 <script>
 import axios from "axios";
 import $ from "jquery";
+import twmap from "@/components/map.vue";
 
 export default {
+  components: { twmap },
   data() {
     return {
       city: [
@@ -116,12 +119,17 @@ export default {
               resolve(res);
             })
             .catch(error => {
-              console.log(error);
+              reject(error);
             });
         });
       }
       promise().then(function(data) {
+        const nodata = data.data.records.locations[0].location.length;
         const road = data.data.records.locations[0].location[0].weatherElement;
+        if (nodata === 0) {
+          alert("很抱歉");
+          return;
+        }
         //台北的天氣有問題
         vm.result.chance = road[0].time[0].elementValue[0].value;
         vm.result.average = road[1].time[0].elementValue[0].value;
@@ -130,16 +138,17 @@ export default {
         const today = new Date();
         vm.date = `${today.getMonth()}/${today.getDate()}`;
         vm.checkImg(vm.phenomenon);
+        vm.loading = false;
       });
     },
     search() {
       //搜尋縣市
+      this.loading = true;
       this.getweather(this.chooseCity);
     },
     checkImg(data) {
       //判斷天氣，顯示不同的圖片
       const vm = this;
-      console.log(data);
       const weatherImg = {
         陰短暫雨: () => {
           vm.img_url = vm.weatherUrl.rain;
@@ -155,6 +164,9 @@ export default {
         },
         晴時多雲: () => {
           vm.img_url = vm.weatherUrl.cloud;
+        },
+        多雲短暫雨: () => {
+          vm.img_url = vm.weatherUrl.rain;
         }
       };
       weatherImg[data]();
