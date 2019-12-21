@@ -15,12 +15,12 @@
         </button>
         <!-- <i class="fas fa-search carousel__search-icon"></i> -->
       </div>
-      <div class="carousel__title">
+      <!-- <div class="carousel__title">
         <i class="fas fa-cloud-sun"></i>
         Taiwan weather
         <!-- <i class="el-icon-cloudy-and-sunny"></i>
         <i class="far fa-sun"></i> -->
-      </div>
+      <!-- </div> -->
     </div>
     <div class="weather" id="weather" v-if="chooseCity != ''">
       <!-- <video autoplay muted loop class="weather__video">
@@ -83,6 +83,17 @@ export default {
         "屏東縣",
         "台東縣",
         "花蓮縣"
+      ],
+      taiwan:[
+        {
+           'zh':"台北市",
+           'english':'taipei_city'
+        },
+        {
+          
+        }
+       
+
       ],
       chooseCity: "",
       result: {
