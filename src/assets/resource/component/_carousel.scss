@@ -5,8 +5,8 @@
     position: relative;
     &__map{
         position: absolute;
-        top: 55%;
-        left: 25%;
+        top: 50%;
+        left: 30%;
         z-index: 99;
         width: 450px;
         height: auto;
@@ -20,32 +20,41 @@
         background-position: center;
         background-attachment: fixed;
     }
-    &__search{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        width: 25rem;
-        &-bar{
-            width: 15rem;
-            height: 3rem;
-            font-size: 2rem;
-        }
-        &-icon{
-            background-color: $color-grey-light-1;
-            height: 3rem;
-            transform: translateY(-0.5rem);
-            font-size: 2rem;
-        }
-    }
     &__title{
         position: absolute;
-        top: 10%;
+        top: 5%;
         left: 10%;
         font-size: 4rem;
         color: $color-grey-dark;
+    }
+    &__result{
+        background-color: rgba($color-grey-dark-3,0.75);
+        position: absolute;
+        top: 50%;
+        left: 70%;
+        height: 60%;
+        width: 30%;
+        transform: translate(-50%,-50%);
+        border-radius: 20px;
+        color: $color-grey-light-1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        &-descript{
+            width: 80%;
+            margin: 0 auto;
+            font-size: 20px;
+        }
+    }
+    &__city{
+        display: flex;
+        justify-content: space-around;
+        color: $color-grey-light-1;
+        &-city{
+            font-size: 32px;
+        }
+        &-degree{
+            font-size: 25px;
+        }
     }
 }
