@@ -432,8 +432,8 @@ export default {
     },
     mounted(){
         const vm=this;
-        $('path').mouseenter(function(e){
-            vm.chooseCity=$(this).attr("data-name");
+        $('path').click(function(){
+            vm.chooseCity=$(this).attr('data-name');
             vm.pushcity();
         })
     }
